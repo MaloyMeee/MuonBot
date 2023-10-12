@@ -237,3 +237,4 @@ def get_info_from_xml(soup: str) -> None:
     number_active = re.findall(r'\d+', active_nodes)
     info = [total_nodes, active_nodes, number_active[0]]
     return info
+
