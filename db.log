@@ -55,3 +55,39 @@ ERROR process_handler 2023-09-28 20:57:01,682 Parsing status error: 'str' object
 INFO db 2023-09-28 20:57:48,891 Initializing database...
 INFO process_handler 2023-09-28 20:57:51,333 Processing handler command status
 INFO process_handler 2023-09-28 20:57:52,479 Getting info from XML
+INFO db 2023-10-12 20:26:06,087 Initializing database...
+INFO process_handler 2023-10-12 20:26:10,718 Processing handler command start
+INFO db 2023-10-12 20:26:10,718 Checking user_id in db...
+INFO db 2023-10-12 20:26:10,723 User 466409506 found in db.
+INFO process_handler 2023-10-12 20:26:26,557 Processing handler command start
+INFO db 2023-10-12 20:26:26,558 Checking user_id in db...
+INFO db 2023-10-12 20:26:26,559 User 466409506 found in db.
+INFO process_handler 2023-10-12 20:26:46,381 Processing handler command about
+INFO process_handler 2023-10-12 20:26:48,947 Processing handler command help
+INFO process_handler 2023-10-12 20:26:51,950 Processing handler command status
+INFO process_handler 2023-10-12 20:26:53,122 Getting info from XML
+INFO db 2023-10-12 21:04:25,729 Initializing database...
+INFO process_handler 2023-10-12 21:04:59,834 Processing handler command start
+INFO db 2023-10-12 21:04:59,834 Checking user_id in db...
+INFO db 2023-10-12 21:04:59,836 User 466409506 found in db.
+INFO process_handler 2023-10-12 21:05:02,508 Processing handler text message
+INFO process_handler 2023-10-12 21:05:02,508 Checking IP address 92.51.39.150
+INFO process_handler 2023-10-12 21:05:02,509 IP address 92.51.39.150 is valid
+INFO process_handler 2023-10-12 21:05:02,509 Try connecting to ip
+INFO process_handler 2023-10-12 21:05:02,589 Take node info
+INFO db 2023-10-12 21:08:15,261 Initializing database...
+INFO process_handler 2023-10-12 21:08:16,823 Processing handler text message
+INFO process_handler 2023-10-12 21:08:16,823 Checking IP address 85.13.42.150
+INFO process_handler 2023-10-12 21:08:16,823 IP address 85.13.42.150 is valid
+INFO process_handler 2023-10-12 21:08:16,824 Try connecting to ip
+INFO process_handler 2023-10-12 21:08:28,946 Processing handler text message
+INFO process_handler 2023-10-12 21:08:28,947 Checking IP address 85.13.42.150
+INFO process_handler 2023-10-12 21:08:28,947 IP address 85.13.42.150 is valid
+INFO process_handler 2023-10-12 21:08:28,947 Try connecting to ip
+ERROR process_handler 2023-10-12 21:08:36,837 Error getting node info
+INFO db 2023-10-12 21:13:14,731 Initializing database...
+INFO process_handler 2023-10-12 21:13:21,398 Processing handler text message
+INFO process_handler 2023-10-12 21:13:21,398 Checking IP address 85.13.42.150
+INFO process_handler 2023-10-12 21:13:21,398 IP address 85.13.42.150 is valid
+INFO process_handler 2023-10-12 21:13:21,399 Try connecting to ip
+ERROR process_handler 2023-10-12 21:13:41,402 ERROR Timeout while connecting to ip HTTPConnectionPool(host='85.13.42.150', port=8011): Max retries exceeded with url: /status (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x0000024D40DD3450>, 'Connection to 85.13.42.150 timed out. (connect timeout=20)'))

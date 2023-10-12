@@ -1,6 +1,6 @@
 import sqlite3 as sql
 import logging
-from config1 import *
+from config import *
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 sentry_logging = LoggingIntegration(

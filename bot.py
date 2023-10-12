@@ -1,11 +1,11 @@
 import telebot
 from telebot import types
-from config1 import *
+from config import *
 from process_handler import *
 import db
 import logging
 import sentry_sdk
-from config1 import *
+from config import *
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 sentry_sdk.init(
@@ -46,6 +46,15 @@ def handler_command_about(message: str) -> None:
 @bot.message_handler(commands=['help'])
 def handler_command_help(message: str) -> None:
     processing_handler_command_help(message)
+
+@bot.message_handler(commands=['watchdog'])
+def handler_command_watchdog(message: str) -> None:
+    processing_handler_command_watchdog(message)
+
+
+@bot.message_handler(func=lambda message: True)
+def text_message_handler(message):
+    processing_handler_text_message(message)
 
 
 def main() -> None:
