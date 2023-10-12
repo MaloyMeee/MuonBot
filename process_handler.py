@@ -74,6 +74,7 @@ def processing_handler_command_help(message: str) -> None:
     except Exception as e:
         logger.error(f"Error while processing handler command help: {e}")
 
+processing_handler_command_watchdog(message)
 
 def processing_handler_text_message(message: str) -> None:
     logger.info(f"Processing handler text message")
@@ -86,6 +87,7 @@ def processing_handler_text_message(message: str) -> None:
                 chat_id=message.chat.id,
                 text=message_text,
                 parse_mode='Markdown')
+
 
 
 def get_node_info(req):
