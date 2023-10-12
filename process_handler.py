@@ -100,11 +100,8 @@ def processing_handler_command_watchdog(message: str) -> None:
                                 text="No connection. Check node status",
                                 parse_mode='Markdown')
                         else:
-                            bot.send_message(
-                                chat_id=message.chat.id,
-                                text="All ok!",
-                                parse_mode='Markdown')
-                    time.sleep(5)
+                            continue
+                    time.sleep(60)
                 else:
                     break
     except Exception as e:
