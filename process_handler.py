@@ -12,6 +12,7 @@ from datetime import datetime
 import lxml
 import re
 import threading as th
+
 sentry_logging = LoggingIntegration(
     level=logging.INFO,
     event_level=logging.WARNING
@@ -27,13 +28,14 @@ logger = logging.getLogger(__name__)
 bot = telebot.TeleBot(TOKEN)
 watchdog = False
 
+
 def processing_handler_command_start(message: str):
     try:
         logger.info(f"Processing handler command start")
         user_id = message.from_user.id
         if not check_user_in_db(user_id):
             set_user_id(user_id)
-            welcome_message(message)
+            processing_handler_command_status(message)
     except Exception as e:
         logger.error(f"Error while processing handler command start: {e}")
 
@@ -58,7 +60,6 @@ def processing_handler_command_status(message: str):
         bot.send_message(message.chat.id, messages)
     except Exception as e:
         logger.error(f'Parsing status error: {str(e)}')
-    pass
 
 
 def processing_handler_command_about(message: str) -> None:
@@ -79,32 +80,35 @@ def processing_handler_command_help(message: str) -> None:
 
 def processing_handler_command_watchdog(message: str) -> None:
     logger.info(f"Processing handler watchdog command")
-    global watchdog
-    if watchdog is False:
-        watchdog = True
-        bot.send_message(
-            chat_id=message.chat.id,
-            text="Start monitor the node",
-            parse_mode='Markdown')
-        while True:
-            if watchdog is True:
-                text = message.text.split(' ')[1]
-                if check_ip_address(message, text):
-                    req = connect(message, text)
-                    if not req:
-                        logger.error(f"ERROR while connecting")
-                        bot.send_message(
-                            chat_id=message.chat.id,
-                            text="No connection. Check node status",
-                            parse_mode='Markdown')
-                    else:
-                        bot.send_message(
-                            chat_id=message.chat.id,
-                            text="All ok!",
-                            parse_mode='Markdown')
-                time.sleep(5)
-            else:
-                break
+    try:
+        global watchdog
+        if watchdog is False:
+            watchdog = True
+            bot.send_message(
+                chat_id=message.chat.id,
+                text="Start monitor the node",
+                parse_mode='Markdown')
+            while True:
+                if watchdog is True:
+                    text = message.text.split(' ')[1]
+                    if check_ip_address(message, text):
+                        req = connect(message, text)
+                        if not req:
+                            logger.error(f"ERROR while connecting")
+                            bot.send_message(
+                                chat_id=message.chat.id,
+                                text="No connection. Check node status",
+                                parse_mode='Markdown')
+                        else:
+                            bot.send_message(
+                                chat_id=message.chat.id,
+                                text="All ok!",
+                                parse_mode='Markdown')
+                    time.sleep(5)
+                else:
+                    break
+    except Exception as e:
+        logger.error(f"ERROR in watchdog: {e}")
 
 
 def processing_handler_command_watchdog_stop(message):
@@ -116,9 +120,9 @@ def processing_handler_command_watchdog_stop(message):
         parse_mode='Markdown')
 
 
-def processing_handler_text_message(message: str) -> None:
+def processing_handler_command_check_node(message: str) -> None:
     logger.info(f"Processing handler text message")
-    text = message.text.strip()
+    text = message.text.split(' ')[1]
     if check_ip_address(message, text):
         req = connect(message, text)
         if req.status_code == 200:
@@ -127,6 +131,10 @@ def processing_handler_text_message(message: str) -> None:
                 chat_id=message.chat.id,
                 text=message_text,
                 parse_mode='Markdown')
+
+
+def processing_handler_text_message(message):
+    processing_handler_command_help(message)
 
 
 def get_node_info(req):
