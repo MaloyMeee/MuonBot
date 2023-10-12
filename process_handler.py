@@ -1,3 +1,5 @@
+import time
+
 import telebot
 from db import *
 from config import *
@@ -9,7 +11,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import lxml
 import re
-
+import threading as th
 sentry_logging = LoggingIntegration(
     level=logging.INFO,
     event_level=logging.WARNING
@@ -23,7 +25,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 bot = telebot.TeleBot(TOKEN)
-
+watchdog = False
 
 def processing_handler_command_start(message: str):
     try:
@@ -74,7 +76,45 @@ def processing_handler_command_help(message: str) -> None:
     except Exception as e:
         logger.error(f"Error while processing handler command help: {e}")
 
-processing_handler_command_watchdog(message)
+
+def processing_handler_command_watchdog(message: str) -> None:
+    logger.info(f"Processing handler watchdog command")
+    global watchdog
+    if watchdog is False:
+        watchdog = True
+        bot.send_message(
+            chat_id=message.chat.id,
+            text="Start monitor the node",
+            parse_mode='Markdown')
+        while True:
+            if watchdog is True:
+                text = message.text.split(' ')[1]
+                if check_ip_address(message, text):
+                    req = connect(message, text)
+                    if not req:
+                        logger.error(f"ERROR while connecting")
+                        bot.send_message(
+                            chat_id=message.chat.id,
+                            text="No connection. Check node status",
+                            parse_mode='Markdown')
+                    else:
+                        bot.send_message(
+                            chat_id=message.chat.id,
+                            text="All ok!",
+                            parse_mode='Markdown')
+                time.sleep(5)
+            else:
+                break
+
+
+def processing_handler_command_watchdog_stop(message):
+    global watchdog
+    watchdog = False
+    bot.send_message(
+        chat_id=message.chat.id,
+        text="Stop monitor the node",
+        parse_mode='Markdown')
+
 
 def processing_handler_text_message(message: str) -> None:
     logger.info(f"Processing handler text message")
@@ -87,7 +127,6 @@ def processing_handler_text_message(message: str) -> None:
                 chat_id=message.chat.id,
                 text=message_text,
                 parse_mode='Markdown')
-
 
 
 def get_node_info(req):

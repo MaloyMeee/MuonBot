@@ -7,6 +7,7 @@ import logging
 import sentry_sdk
 from config import *
 from sentry_sdk.integrations.logging import LoggingIntegration
+import threading as th
 
 sentry_sdk.init(
     dsn=DSN,
@@ -49,7 +50,12 @@ def handler_command_help(message: str) -> None:
 
 @bot.message_handler(commands=['watchdog'])
 def handler_command_watchdog(message: str) -> None:
-    processing_handler_command_watchdog(message)
+    t1 = th.Thread(target=processing_handler_command_watchdog, args=(message,), daemon=True)
+    t1.start()
+
+@bot.message_handler(commands=['watchdog_stop'])
+def handler_command_watchdog_stop(message: str) -> None:
+    processing_handler_command_watchdog_stop(message)
 
 
 @bot.message_handler(func=lambda message: True)
