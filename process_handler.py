@@ -25,7 +25,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-bot = telebot.TeleBot(TOKEN)
+bot = telebot.TeleBot(TOKEN, skip_pending=True)
 watchdog = False
 
 
@@ -86,19 +86,22 @@ def processing_handler_command_watchdog(message: str) -> None:
         global watchdog
         if watchdog is False:
             watchdog = True
+            try:
+                text = message.text.split(' ')[1]
+            except IndexError:
+                logger.error(f"ERROR ip is incorrect")
+                bot.send_message(
+                    chat_id=message.chat.id,
+                    text="Something went wrong. Check if the command is written correctly",
+                    parse_mode='Markdown')
+                return None
             bot.send_message(
                 chat_id=message.chat.id,
                 text="Start monitor the node",
                 parse_mode='Markdown')
             while True:
                 if watchdog is True:
-                    text = message.text.split(' ')[1]
-                    if text == None or text == "":
-                        bot.send_message(
-                            chat_id=message.chat.id,
-                            text="Check ut ip and try again. /watchdog ip_address",
-                            parse_mode='Markdown')
-                    elif check_ip_address(message, text):
+                    if check_ip_address(message, text):
                         req = connect(message, text)
                         if not req:
                             logger.error(f"ERROR while connecting")
@@ -110,10 +113,7 @@ def processing_handler_command_watchdog(message: str) -> None:
                             continue
                     else:
                         logger.error(f"ERROR ip is incorrect")
-                        bot.send_message(
-                            chat_id=message.chat.id,
-                            text="Something wrong. Try again or check ur ip",
-                            parse_mode='Markdown')
+                        break
                     time.sleep(60)
                 else:
                     break
@@ -132,15 +132,30 @@ def processing_handler_command_watchdog_stop(message):
 
 def processing_handler_command_check_node(message: str) -> None:
     logger.info(f"Processing handler text message")
-    text = message.text.split(' ')[1]
-    if check_ip_address(message, text):
-        req = connect(message, text)
-        if req.status_code == 200:
-            message_text = get_node_info(req)
+    try:
+        try:
+            text = message.text.split(' ')[1]
+        except IndexError:
+            logger.error(f"ERROR ip is incorrect")
             bot.send_message(
                 chat_id=message.chat.id,
-                text=message_text,
+                text="Something went wrong. Check if the command is written correctly",
                 parse_mode='Markdown')
+        if check_ip_address(message, text):
+            req = connect(message, text)
+            if req.status_code == 200:
+                message_text = get_node_info(req)
+                bot.send_message(
+                    chat_id=message.chat.id,
+                    text=message_text,
+                    parse_mode='Markdown')
+            else:
+                return None
+        else:
+            return None
+    except Exception as e:
+        logger.error(f"ERROR: in processing handler text message: {e}")
+        return None
 
 
 def processing_handler_text_message(message):
@@ -207,6 +222,7 @@ def connect(message: str, ip: str) -> None | str:
         bot.send_message(
             chat_id=message.chat.id,
             text='Connection is not established. You have entered the wrong IP address. Try again')
+        return None
     except requests.exceptions.RequestException as e:
         logger.error(f"ERROR getting node info {e}")
         bot.send_message(message.chat.id, f"ERROR {e}")
