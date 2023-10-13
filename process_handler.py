@@ -35,7 +35,9 @@ def processing_handler_command_start(message: str):
         user_id = message.from_user.id
         if not check_user_in_db(user_id):
             set_user_id(user_id)
-            processing_handler_command_status(message)
+            processing_handler_command_help(message)
+        else:
+            processing_handler_command_help(message)
     except Exception as e:
         logger.error(f"Error while processing handler command start: {e}")
 
@@ -91,7 +93,12 @@ def processing_handler_command_watchdog(message: str) -> None:
             while True:
                 if watchdog is True:
                     text = message.text.split(' ')[1]
-                    if check_ip_address(message, text):
+                    if text == None or text == "":
+                        bot.send_message(
+                            chat_id=message.chat.id,
+                            text="Check ut ip and try again. /watchdog ip_address",
+                            parse_mode='Markdown')
+                    elif check_ip_address(message, text):
                         req = connect(message, text)
                         if not req:
                             logger.error(f"ERROR while connecting")
@@ -101,6 +108,12 @@ def processing_handler_command_watchdog(message: str) -> None:
                                 parse_mode='Markdown')
                         else:
                             continue
+                    else:
+                        logger.error(f"ERROR ip is incorrect")
+                        bot.send_message(
+                            chat_id=message.chat.id,
+                            text="Something wrong. Try again or check ur ip",
+                            parse_mode='Markdown')
                     time.sleep(60)
                 else:
                     break
