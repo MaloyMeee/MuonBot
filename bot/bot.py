@@ -73,6 +73,5 @@ def main() -> None:
     except Exception as e:
         print(e)
 
-
 main()
 
