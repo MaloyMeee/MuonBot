@@ -9,4 +9,4 @@ services:
       - TOKEN=${TOKEN}
     volumes:
       - ./bot:/app/bot
-    command: python bot/main.py
+    command: python bot/bot.py
