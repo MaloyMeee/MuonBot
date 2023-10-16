@@ -5,6 +5,4 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: always
-    environment:
-      - TOKEN=${TOKEN}
     command: python bot/bot.py
