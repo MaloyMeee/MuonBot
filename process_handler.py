@@ -110,7 +110,7 @@ def processing_handler_command_watchdog(message: str) -> None:
                                 text="No connection. Check node status",
                                 parse_mode='Markdown')
                         else:
-                            time.sleep(60)
+                            time.sleep(TTF)
                             continue
                     else:
                         logger.error(f"ERROR ip is incorrect")
