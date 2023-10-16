@@ -8,5 +8,5 @@ services:
     environment:
       - TOKEN=${TOKEN}
     volumes:
-      - ./main:/app/bot
+      - ./bot:/app/bot
     command: python bot/main.py
