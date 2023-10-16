@@ -7,6 +7,4 @@ services:
     restart: always
     environment:
       - TOKEN=${TOKEN}
-    volumes:
-      - ./bot:/app/bot
     command: python bot/bot.py
