@@ -1,17 +1,15 @@
 import time
 
 import telebot
-from db import *
-from config import *
+from bot.db import *
+from bot.config import *
 import logging
 from sentry_sdk.integrations.logging import LoggingIntegration
 import ipaddress
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-import lxml
 import re
-import threading as th
 
 sentry_logging = LoggingIntegration(
     level=logging.INFO,

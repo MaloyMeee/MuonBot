@@ -1,6 +1,3 @@
-import telebot
-from telebot import types
-from config import *
 from process_handler import *
 import db
 import logging
