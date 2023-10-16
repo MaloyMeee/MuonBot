@@ -1,8 +1,8 @@
 import time
 
 import telebot
-from bot.db import *
-from bot.config import *
+from db import *
+from config import *
 import logging
 from sentry_sdk.integrations.logging import LoggingIntegration
 import ipaddress
