@@ -13,7 +13,7 @@
 1) Скачиваем бота
 
 ```
-sudo git clone https://github.com/MaloyMeee/MuonBot.git
+sudo git clone https://github.com/g7AzaZLO/MuonBot.git
 
 ```
 2) Переходим в папку
